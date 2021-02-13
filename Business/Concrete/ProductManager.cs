@@ -24,19 +24,19 @@ namespace Business.Concrete
         {
             if (product.ProductName.Length<2)
             {
-                return new ErrorResult(Messages.ProductAdded);
+                return new ErrorResult(Messages.ProductNameInValid);
             }
             _productDal.Add(product);
 
-            return new SuccessResult("Ürün Eklendi");
+            return new SuccessResult(Messages.ProductAdded);
         }
 
         public IDataResult<List<Product>> GetAll()
         {
-            if (DateTime.Now.Hour==22)
-            {
-                return new ErrorDataResult<List<Product>>(Messages.MeintenanceTime);
-            }
+            //if (DateTime.Now.Hour==22)
+            //{
+            //    return new ErrorDataResult<List<Product>>(Messages.MeintenanceTime);
+            //}
             return new SuccessDataResult<List<Product>>(_productDal.GetAll(),Messages.ProductListed);
         }
 
@@ -57,6 +57,10 @@ namespace Business.Concrete
 
         public IDataResult<List<ProductDetailDto>> GetProductDetails()
         {
+            if (DateTime.Now.Hour == 23)
+            {
+                return new ErrorDataResult<List<ProductDetailDto>>(Messages.MeintenanceTime);
+            }
             return new SuccessDataResult<List<ProductDetailDto>>(_productDal.GetProductDetails());
         }
     }
